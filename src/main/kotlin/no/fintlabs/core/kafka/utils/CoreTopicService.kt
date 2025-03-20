@@ -29,15 +29,27 @@ class CoreTopicService(
 
     fun ensureTopic(topicNameParameters: TopicNameParameters, retentionTimeInMs: Long) {
         when (topicNameParameters) {
-            is EntityTopicNameParameters -> ensureTopicInternal(topicNameParameters, retentionTimeInMs) { params, retention ->
+            is EntityTopicNameParameters -> ensureTopicInternal(
+                topicNameParameters,
+                retentionTimeInMs
+            ) { params, retention ->
                 entityTopicService.ensureTopic(params, retention)
             }
-            is EventTopicNameParameters -> ensureTopicInternal(topicNameParameters, retentionTimeInMs) { params, retention ->
+
+            is EventTopicNameParameters -> ensureTopicInternal(
+                topicNameParameters,
+                retentionTimeInMs
+            ) { params, retention ->
                 eventTopicService.ensureTopic(params, retention)
             }
-            is ErrorEventTopicNameParameters -> ensureTopicInternal(topicNameParameters, retentionTimeInMs) { params, retention ->
+
+            is ErrorEventTopicNameParameters -> ensureTopicInternal(
+                topicNameParameters,
+                retentionTimeInMs
+            ) { params, retention ->
                 errorTopicService.ensureTopic(params, retention)
             }
+
             else -> logger.error(
                 "Failed to ensure topic: {} due to non-matching topic parameter type",
                 topicNameParameters.topicName
@@ -60,6 +72,7 @@ class CoreTopicService(
     fun hasDifferentRetentionTime(topicName: String, newRetentionTimeInMs: Long): Boolean =
         topicRetentionMap[topicName] != newRetentionTimeInMs
 
-    fun getRetentionTime(topicName: String): Long? = topicRetentionMap[topicName]
+    fun getRetentionTime(topicNameParameters: TopicNameParameters): Long? =
+        topicRetentionMap[topicNameParameters.topicName]
 
 }
