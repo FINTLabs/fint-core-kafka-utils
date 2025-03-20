@@ -15,6 +15,7 @@ java {
 }
 
 repositories {
+	maven("https://repo.fintlabs.no/releases")
 	mavenCentral()
 }
 
