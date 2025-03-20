@@ -8,33 +8,36 @@ plugins {
 
 group = "no.fintlabs"
 version = "0.0.1-SNAPSHOT"
-val reposolite = "https://repo.fintlabs.no/releases"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
+		languageVersion.set(JavaLanguageVersion.of(21))
 	}
 }
 
 repositories {
-	maven(reposolite)
+	maven("https://repo.fintlabs.no/releases")
 	mavenCentral()
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter")
-	implementation("org.springframework.kafka:spring-kafka")
+	implementation("org.springframework.boot:spring-boot-starter:3.4.3")
+	implementation("org.springframework.kafka:spring-kafka:3.4.3")
 	implementation("no.fintlabs:fint-kafka:3.2.0-rc-1")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testImplementation("org.springframework.kafka:spring-kafka-test")
+	testImplementation("org.mockito:mockito-core:5.5.0")
+	testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
+
 kotlin {
 	compilerOptions {
-		freeCompilerArgs.addAll("-Xjsr305=strict")
+		freeCompilerArgs.add("-Xjsr305=strict")
 	}
 }
 
@@ -45,7 +48,7 @@ tasks.withType<Test> {
 publishing {
 	repositories {
 		maven {
-			url = uri(reposolite)
+			url = uri("https://repo.fintlabs.no/releases")
 			credentials {
 				username = System.getenv("REPOSILITE_USERNAME")
 				password = System.getenv("REPOSILITE_PASSWORD")
