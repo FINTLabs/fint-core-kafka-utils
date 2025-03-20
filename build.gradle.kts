@@ -1,12 +1,14 @@
 plugins {
 	kotlin("jvm") version "1.9.25"
 	kotlin("plugin.spring") version "1.9.25"
-	id("org.springframework.boot") version "3.4.3"
+	id("java-library")
 	id("io.spring.dependency-management") version "1.1.7"
+	`maven-publish`
 }
 
 group = "no.fintlabs"
 version = "0.0.1-SNAPSHOT"
+val reposolite = "https://repo.fintlabs.no/releases"
 
 java {
 	toolchain {
@@ -15,7 +17,7 @@ java {
 }
 
 repositories {
-	maven("https://repo.fintlabs.no/releases")
+	maven(reposolite)
 	mavenCentral()
 }
 
@@ -38,4 +40,24 @@ kotlin {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+publishing {
+	repositories {
+		maven {
+			url = uri(reposolite)
+			credentials {
+				username = System.getenv("REPOSILITE_USERNAME")
+				password = System.getenv("REPOSILITE_PASSWORD")
+			}
+			authentication {
+				create<BasicAuthentication>("basic")
+			}
+		}
+	}
+	publications {
+		create<MavenPublication>("maven") {
+			from(components["java"])
+		}
+	}
 }
