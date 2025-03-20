@@ -15,20 +15,23 @@ java {
 	}
 }
 
+val reposolite = "https://repo.fintlabs.no/releases"
+val springVersion = "3.4.3"
+
 repositories {
-	maven("https://repo.fintlabs.no/releases")
+	maven(reposolite)
 	mavenCentral()
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter:3.4.3")
-	implementation("org.springframework.kafka:spring-kafka:3.4.3")
+	implementation("org.springframework.boot:spring-boot-starter-webflux:$springVersion")
+	implementation("org.springframework.boot:spring-boot-starter:$springVersion")
+	implementation("org.springframework.kafka:spring-kafka:3.3.4")
 	implementation("no.fintlabs:fint-kafka:3.2.0-rc-1")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-test:$springVersion")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-	testImplementation("org.springframework.kafka:spring-kafka-test")
 	testImplementation("org.mockito:mockito-core:5.5.0")
 	testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -48,7 +51,7 @@ tasks.withType<Test> {
 publishing {
 	repositories {
 		maven {
-			url = uri("https://repo.fintlabs.no/releases")
+			url = uri(reposolite)
 			credentials {
 				username = System.getenv("REPOSILITE_USERNAME")
 				password = System.getenv("REPOSILITE_PASSWORD")
